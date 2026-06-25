@@ -12,8 +12,8 @@ interface Student {
 }
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
+  selector: 'app-crudgenerico',
+///  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './crudgenerico.html',
   styleUrl: './crudgenerico.css',
