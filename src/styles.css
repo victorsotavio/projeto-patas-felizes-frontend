@@ -1,32 +1,55 @@
 /* You can add global styles to this file, and also import other style files */
 body {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-.corVerde{
+.corVerde {
     color: #0AB378;
 }
-.corVerdeBackground{
+
+.corVerdeBackground {
     background-color: #0AB378;
 }
 
-.corEscura{
+.corEscura {
     color: #212529;
 }
-.corEscuraBackground{
-    background-color: #212529;
-}
 
-.botaoPadrao {
+.corEscuraBackground {
     background-color: #212529;
-    color: #ffffff; /* Texto em branco */
-    border: none;    /* Remove a borda padrão do HTML */
-    transition: background-color 0.2s ease; /* Deixa a transição de cor suave */
 }
 
 /* Efeito ao passar o mouse */
 .botaoPadrao:hover {
-    background-color: #088A5C; /* Verde mais escuro que o #0AB378 */
-    color: #ffffff;            /* Garante que o texto continue branco */
-    cursor: pointer;          /* Transforma a seta do mouse na mãozinha de clique */
+    background-color: #088A5C;
+    /* Verde mais escuro que o #0AB378 */
+    /* Garante que o texto continue branco */
+    cursor: pointer;
+    /* Transforma a seta do mouse na mãozinha de clique */
+}
+
+.botaoPadrao {
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #ffffff;
+    text-align: center;
+    text-transform: none;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    background-color: transparent;
+    /* Sem cor por padrão */
+    border: 1px solid transparent;
+    /* Borda invisível por padrão */
+    padding: 0.375rem 0.75rem;
+    /* Espaçamento interno padrão */
+    font-size: 1rem;
+    border-radius: 0.375rem;
+    /* Cantos arredondados */
+    transition: color 0.15s ease-in-out,
+        background-color 0.15s ease-in-out,
+        border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
+    /* Suaviza efeitos de hover/foco */
 }

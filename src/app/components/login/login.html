@@ -1,157 +1,41 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #0f1117;
-      background-image:
-        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(99, 102, 241, 0.18) 0%, transparent 70%);
+    .form-signin {
+      max-width: 330px;
+      padding: 15px;
     }
-
-    .login-card {
-      background: #16181f;
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 18px;
-      padding: 2.8rem 2.5rem 2.5rem;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
-    }
-
-    .logo-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 2rem;
-    }
-
-    .logo-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 24px rgba(99, 102, 241, 0.4);
-    }
-
-    .logo-icon svg {
-      width: 28px;
-      height: 28px;
-      fill: #fff;
-    }
-
-    .logo-name {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.02em;
-    }
-
-    .logo-tagline {
-      font-size: 0.78rem;
-      color: #6b7280;
-      margin-top: -6px;
-      letter-spacing: 0.03em;
-    }
-
-    .form-label {
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: #9ca3af;
-      margin-bottom: 6px;
-      letter-spacing: 0.01em;
-    }
-
-    .form-control {
-      background: #1e2030 !important;
-      border: 1px solid rgba(255,255,255,0.09) !important;
-      border-radius: 10px !important;
-      color: #f3f4f6 !important;
-      font-size: 0.9rem;
-      padding: 0.65rem 1rem;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .form-control::placeholder { color: #4b5563 !important; }
-
-    .form-control:focus {
-      border-color: rgba(99, 102, 241, 0.6) !important;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
-      outline: none;
-    }
-
-    .mb-form { margin-bottom: 1.1rem; }
-
-    .btn-entrar {
-      width: 100%;
-      padding: 0.7rem;
-      border: none;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #6366f1, #7c3aed);
-      color: #fff;
-      font-size: 0.92rem;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      cursor: pointer;
-      margin-top: 0.4rem;
-      transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
-      box-shadow: 0 4px 18px rgba(99,102,241,0.3);
-    }
-
-    .btn-entrar:hover {
-      opacity: 0.92;
-      box-shadow: 0 6px 24px rgba(99,102,241,0.45);
-    }
-
-    .btn-entrar:active { transform: scale(0.98); }
   </style>
 </head>
-<body>
-  <div class="login-card">
 
-    <!-- Logo -->
-    <div class="logo-wrap">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-        </svg>
+<body class="bg-light d-flex align-items-center justify-content-center vh-100">
+
+  <main class="form-signin w-100 m-auto">
+    <form>
+      <div class="text-center">
+        <img class="mb-4" src="https://getbootstrap.com/docs/5.3/assets/brand/bootstrap-logo.svg" alt="Logo" width="72" height="57">
       </div>
-      <div>
-        <div class="logo-name">Nexora</div>
-        <div class="logo-tagline text-center">Bem-vindo de volta</div>
+
+      <h1 class="h3 mb-3 fw-normal text-center">Please sign in</h1>
+
+      <div class="form-floating mb-2">
+        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
+        <label for="floatingInput">Email address</label>
       </div>
-    </div>
 
-    <!-- Formulário -->
-    <div class="mb-form">
-      <label class="form-label" for="email">E-mail</label>
-      <input type="email" id="email" class="form-control" placeholder="voce@email.com" autocomplete="email"/>
-    </div>
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" required>
+        <label for="floatingPassword">Password</label>
+      </div>
 
-    <div class="mb-form">
-      <label class="form-label" for="senha">Senha</label>
-      <input type="password" id="senha" class="form-control" placeholder="••••••••" autocomplete="current-password"/>
-    </div>
+      <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+    </form>
+  </main>
 
-    <button class="btn-entrar">Entrar</button>
-
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
