@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Login } from './components/login/login';
 import { Sec } from './components/sec/sec';
 import { Homegenerica } from './components/homegenerica/homegenerica';
+import { Crudgenerico } from './components/crudgenerico/crudgenerico';
 
 export const routes: Routes = [
   {
@@ -20,6 +21,6 @@ export const routes: Routes = [
   },
   {
     path: 'sec',
-    component: Sec,
+    component: Crudgenerico
   }
 ];
