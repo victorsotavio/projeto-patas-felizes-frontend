@@ -1,4 +1,8 @@
-<div class="container mt-5">
+<div class="container mt-2">
+  <div>
+    <h1 class="mb-0">Funcionalidade</h1>
+    <hr class="border border-3 mt-0 mb-4 opacity-100">
+  </div>
   <div class="card shadow-sm">
     <div class="card-body">
       <div class="row mb-3 align-items-center">
@@ -16,7 +20,7 @@
           <label class="text-secondary flex-shrink-0">Search:</label>
           <input type="search" class="form-control form-control-sm w-auto" [(ngModel)]="searchTerm"
             (input)="currentPage = 1">
-          <button class="btn btn-primary btn-sm px-3 flex-shrink-0" (click)="onAdd()">Add</button>
+          <button class="btn btn-primary btn-sm px-3 flex-shrink-0 botaoPadrao" (click)="onAdd()">Add</button>
         </div>
       </div>
 
@@ -43,10 +47,10 @@
               <td>{{ student.phone }}</td>
               <td>{{ student.course }}</td>
               <td>
-                <button class="btn btn-primary btn-sm px-3" (click)="onEdit(student)">Edit</button>
+                <button class="btn btn-primary btn-sm px-3 botaoPadrao" (click)="onEdit(student)">Edit</button>
               </td>
               <td>
-                <button class="btn btn-danger btn-sm px-3" (click)="onDelete(student.id)">Delete</button>
+                <button class="btn btn-danger btn-sm px-3 botaoPadrao" (click)="onDelete(student.id)">Delete</button>
               </td>
             </tr>
             <tr *ngIf="paginatedStudents.length === 0">
