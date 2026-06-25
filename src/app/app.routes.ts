@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { Login } from './components/login/login';
-import { Vet } from './components/vet/vet';
 import { Sec } from './components/sec/sec';
+import { Homegenerica } from './components/homegenerica/homegenerica';
 
 export const routes: Routes = [
   {
@@ -10,11 +10,11 @@ export const routes: Routes = [
   },
   {
     path: 'vet',
-    component: Vet,
+    component: Homegenerica,
     children: [
       {
         path: 'adicionarservico',
-        component: AdicionarServico // Componente FILHO 1 (Acessado via /vet/adicionarservico)
+        component: Homegenerica // Componente FILHO 1 (Acessado via /vet/adicionarservico)
       }
     ]
   },

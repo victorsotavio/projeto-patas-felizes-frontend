@@ -7,5 +7,8 @@ import { Component } from '@angular/core';
   styleUrl: './navbar.css',
 })
 export class Navbar {
-
+logout() {
+  // Sua lógica para deslogar o usuário aqui
+  console.log('Usuário deslogou');
+}
 }
