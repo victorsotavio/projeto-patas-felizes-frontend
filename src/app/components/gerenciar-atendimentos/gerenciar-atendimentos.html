@@ -193,8 +193,7 @@
                 Animal
             </label>
 
-            <select id="editarAnimal" class="form-select" [(ngModel)]="
-              atendimentoEditar.idAnimal
+            <select id="editarAnimal" class="form-select" [(ngModel)]="atendimentoEditar.idAnimal
             ">
                 @for (
                 animal of listaAnimais;
@@ -212,9 +211,7 @@
                 Veterinário
             </label>
 
-            <select id="editarVeterinario" class="form-select" [(ngModel)]="
-              atendimentoEditar.idProfissional
-            ">
+            <select id="editarVeterinario" class="form-select" [(ngModel)]="atendimentoEditar.idProfissional">
                 @for (
                 veterinario of listaVeterinarios;
                 track veterinario.id
@@ -235,9 +232,7 @@
                 Situação
             </label>
 
-            <select id="editarSituacao" class="form-select" [(ngModel)]="
-              atendimentoEditar.situacao
-            ">
+            <select id="editarSituacao" class="form-select" [(ngModel)]="atendimentoEditar.situacao">
                 <option value="AGENDADO">
                     Agendado
                 </option>
