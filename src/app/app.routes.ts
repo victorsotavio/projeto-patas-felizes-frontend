@@ -1,8 +1,10 @@
+import { Modalgenerico } from './components/modalgenerico/modalgenerico';
 import { Routes } from '@angular/router';
 import { Login } from './components/login/login';
 import { Sec } from './components/sec/sec';
 import { Homegenerica } from './components/homegenerica/homegenerica';
 import { Crudgenerico } from './components/crudgenerico/crudgenerico';
+import { GerenciarPetsComponent } from './components/gerenciar-pets/gerenciar-pets';
 
 export const routes: Routes = [
   {
@@ -15,12 +17,16 @@ export const routes: Routes = [
     children: [
       {
         path: 'adicionarservico',
-        component: Homegenerica // Componente FILHO 1 (Acessado via /vet/adicionarservico)
+        component: GerenciarPetsComponent
       }
     ]
   },
   {
     path: 'sec',
-    component: Crudgenerico
+    component: GerenciarPetsComponent
+  },
+  {
+    path: 'modal',
+    component: Modalgenerico
   }
 ];

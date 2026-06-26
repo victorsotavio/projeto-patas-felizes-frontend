@@ -1,0 +1,40 @@
+<app-crudgenerico
+  tituloFuncionalidade="Cadastro de Patas"
+  [colunas]="colunasPet"
+  [dados]="listaDePets"
+  [templateEditar]="btnEditarTabela"
+  [templateDeletar]="btnDeletarTabela">
+
+  <div acoes-topo>
+    <app-modalgenerico titulo="Adicionar Novo Pet" textoBotaoAbrir="Novo Pet 🐾" classeBotaoAbrir="btn-success" (aoSalvar)="cadastrar()">
+      <div class="mb-3">
+        <label>Nome:</label>
+        <input type="text" class="form-control" [(ngModel)]="petCadastrar.nome">
+      </div>
+      <div class="mb-3">
+        <label>Espécie:</label>
+        <input type="text" class="form-control" [(ngModel)]="petCadastrar.especie">
+      </div>
+    </app-modalgenerico>
+  </div>
+
+</app-crudgenerico>
+
+<ng-template #btnEditarTabela let-pet>
+  <app-modalgenerico titulo="Editar Informações" textoBotaoAbrir="Edit" classeBotaoAbrir="btn-primary btn-sm px-3" (click)="petEditar = { ...pet }" (aoSalvar)="salvarEdicao()">
+    <div class="mb-3">
+      <label>Nome:</label>
+      <input type="text" class="form-control" [(ngModel)]="petEditar.nome">
+    </div>
+    <div class="mb-3">
+      <label>Espécie:</label>
+      <input type="text" class="form-control" [(ngModel)]="petEditar.especie">
+    </div>
+  </app-modalgenerico>
+</ng-template>
+
+<ng-template #btnDeletarTabela let-pet>
+  <app-modalgenerico titulo="Atenção!" textoBotaoAbrir="Delete" classeBotaoAbrir="btn-danger btn-sm px-3" (click)="petExcluir = pet" (aoSalvar)="deletar()">
+    <p>Você tem certeza que deseja excluir o cadastro do pet <strong>{{ pet.nome }}</strong>?</p>
+  </app-modalgenerico>
+</ng-template>

@@ -1,7 +1,9 @@
 <app-navbar></app-navbar>
-<div class="d-flex flex-row bg-light p-0">
-    <app-sidebar></app-sidebar>
-    <div class="w-100 align-top">
-        <app-crudgenerico></app-crudgenerico>
-    </div>
+
+<div class="d-flex">
+  <app-sidebar [itensMenu]="meuMenu"></app-sidebar>
+
+  <div class="flex-grow-1 p-4 bg-light">
+    <app-gerenciar-pets></app-gerenciar-pets>
+  </div>
 </div>

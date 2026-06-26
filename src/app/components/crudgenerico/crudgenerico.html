@@ -1,8 +1,9 @@
 <div class="container mt-2">
   <div>
-    <h1 class="mb-0">Funcionalidade</h1>
+    <h1 class="mb-0">{{ tituloFuncionalidade }}</h1>
     <hr class="border border-3 mt-0 mb-4 opacity-100">
   </div>
+  
   <div class="card shadow-sm">
     <div class="card-body">
       <div class="row mb-3 align-items-center">
@@ -18,9 +19,8 @@
 
         <div class="col-sm-7 d-flex justify-content-sm-end align-items-center gap-2 mt-2 mt-sm-0">
           <label class="text-secondary flex-shrink-0">Search:</label>
-          <input type="search" class="form-control form-control-sm w-auto" [(ngModel)]="searchTerm"
-            (input)="currentPage = 1">
-          <button class="btn btn-primary btn-sm px-3 flex-shrink-0 botaoPadrao" (click)="onAdd()">Add</button>
+          <input type="search" class="form-control form-control-sm w-auto" [(ngModel)]="searchTerm" (input)="currentPage = 1">
+          <ng-content select="[acoes-topo]"></ng-content>
         </div>
       </div>
 
@@ -28,57 +28,54 @@
         <table class="table table-bordered table-striped align-middle text-center">
           <thead class="table-light">
             <tr>
-              <th>ID</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email ID</th>
-              <th>Phone No</th>
-              <th>Course</th>
+              @for (coluna of colunas; track coluna.chave) {
+                <th>{{ coluna.titulo }}</th>
+              }
               <th>Edit</th>
               <th>Delete</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let student of paginatedStudents">
-              <td>{{ student.id }}</td>
-              <td>{{ student.firstName }}</td>
-              <td>{{ student.lastName }}</td>
-              <td>{{ student.email }}</td>
-              <td>{{ student.phone }}</td>
-              <td>{{ student.course }}</td>
-              <td>
-                <button class="btn btn-primary btn-sm px-3 botaoPadrao" (click)="onEdit(student)">Edit</button>
-              </td>
-              <td>
-                <button class="btn btn-danger btn-sm px-3 botaoPadrao" (click)="onDelete(student.id)">Delete</button>
-              </td>
-            </tr>
-            <tr *ngIf="paginatedStudents.length === 0">
-              <td colspan="8" class="text-muted py-3">Nenhum registro encontrado.</td>
-            </tr>
+            @for (item of paginatedDados; track item.id) {
+              <tr>
+                @for (coluna of colunas; track coluna.chave) {
+                  <td>{{ item[coluna.chave] }}</td>
+                }
+                <td>
+                  <ng-container *ngTemplateOutlet="templateEditar; context: { $implicit: item }"></ng-container>
+                </td>
+                <td>
+                  <ng-container *ngTemplateOutlet="templateDeletar; context: { $implicit: item }"></ng-container>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td [attr.colspan]="colunas.length + 2" class="text-muted py-3">Nenhum registro encontrado.</td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>
 
       <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center mt-3 text-secondary small">
         <div>
-          Showing {{ filteredStudents.length === 0 ? 0 : (currentPage - 1) * entriesPerPage + 1 }}
-          to {{ (currentPage * entriesPerPage) > filteredStudents.length ? filteredStudents.length : (currentPage *
-          entriesPerPage) }}
-          of {{ filteredStudents.length }} entries
+          Showing {{ filteredDados.length === 0 ? 0 : (currentPage - 1) * entriesPerPage + 1 }}
+          to {{ (currentPage * entriesPerPage) > filteredDados.length ? filteredDados.length : (currentPage * entriesPerPage) }}
+          of {{ filteredDados.length }} entries
         </div>
 
         <nav class="mt-2 mt-sm-0">
           <ul class="pagination pagination-sm mb-0">
             <li class="page-item" [class.disabled]="currentPage === 1">
-              <button class="page-link" (click)="currentPage = currentPage - 1">Previous</button>
+              <button class="page-link" (click)="currentPage = currentPage - 1">Anterior</button>
             </li>
-            <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
-              [class.active]="currentPage === i + 1">
-              <button class="page-link" (click)="currentPage = i + 1">{{ i + 1 }}</button>
-            </li>
+            @for (page of [].constructor(totalPages); track $index) {
+              <li class="page-item" [class.active]="currentPage === $index + 1">
+                <button class="page-link" (click)="currentPage = $index + 1">{{ $index + 1 }}</button>
+              </li>
+            }
             <li class="page-item" [class.disabled]="currentPage === totalPages">
-              <button class="page-link" (click)="currentPage = currentPage + 1">Next</button>
+              <button class="page-link" (click)="currentPage = currentPage + 1">Próximo</button>
             </li>
           </ul>
         </nav>

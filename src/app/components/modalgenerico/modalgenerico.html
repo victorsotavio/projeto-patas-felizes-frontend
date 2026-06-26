@@ -1,0 +1,29 @@
+<button type="button" class="btn" [ngClass]="classeBotaoAbrir" (click)="abrirModal()">
+  {{ textoBotaoAbrir }}
+</button>
+
+@if (isModalOpen) {
+  <div class="modal fade show" style="display: block; background: rgba(0,0,0,0.5);" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        
+        <div class="modal-header">
+          <h5 class="modal-title">{{ titulo }}</h5>
+          <button type="button" class="close" aria-label="Close" (click)="fecharModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <ng-content></ng-content>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="fecharModal()">Fechar</button>
+          <button type="button" class="btn btn-primary" (click)="salvar()">{{ textoSalvar }}</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+}
