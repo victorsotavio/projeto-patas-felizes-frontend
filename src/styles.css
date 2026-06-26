@@ -53,3 +53,30 @@ body {
         box-shadow 0.15s ease-in-out;
     /* Suaviza efeitos de hover/foco */
 }
+
+/* Cor de fundo padrão do botão */
+.btn-custom-verde {
+    background-color: #0AB378 !important; /* Substitua pela sua cor (ex: Roxo) */
+    border-color: #0AB378 !important;     /* Mantém a borda da mesma cor */
+    color: #ffffff !important;            /* Cor do texto (Branco) */
+}
+
+/* Cor de fundo quando o mouse passa por cima (Hover) */
+.btn-custom-verde:hover {
+    background-color: #088A5C !important; /* Um tom mais escuro para o efeito hover */
+    border-color: #088A5C !important;
+    color: #ffffff !important;
+}
+
+.btn-custom-escuro {
+    background-color: #212529 !important; /* Substitua pela sua cor (ex: Roxo) */
+    border-color: #212529 !important;     /* Mantém a borda da mesma cor */
+    color: #ffffff !important;            /* Cor do texto (Branco) */
+}
+
+/* Cor de fundo quando o mouse passa por cima (Hover) */
+.btn-custom-escuro:hover {
+    background-color: #050607 !important; /* Um tom mais escuro para o efeito hover */
+    border-color: #050607 !important;
+    color: #ffffff !important;
+}
