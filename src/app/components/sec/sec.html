@@ -1,1 +1,11 @@
-<p>sec works!</p>
+<div class="area-sistema">
+    <app-navbar></app-navbar>
+
+    <div class="corpo-sistema">
+        <app-sidebar [itensMenu]="itensMenu"></app-sidebar>
+
+        <main class="conteudo-principal">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+</div>

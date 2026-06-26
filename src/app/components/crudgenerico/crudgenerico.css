@@ -1,0 +1,13 @@
+.campo-pesquisa {
+    width: 220px;
+}
+
+.coluna-acoes {
+    width: 190px;
+}
+
+@media (max-width: 576px) {
+    .campo-pesquisa {
+        width: 100%;
+    }
+}

@@ -1,0 +1,27 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+.detalhes-atendimento p {
+    margin-bottom: 0.75rem;
+}
+
+.servico-detalhe {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+@media (max-width: 576px) {
+    .servico-detalhe {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+}

@@ -14,13 +14,16 @@ export class Modalgenerico {
   @Input() textoSalvar: string = 'Salvar';
   @Input() textoBotaoAbrir: string = 'Abrir';
   @Input() classeBotaoAbrir: string = 'btn-primary'; // Ex: btn-success, btn-danger, etc.
+  @Input() exibirBotaoSalvar: boolean = true; // Controla a exibição do botão de salvar
 
   // Evento para avisar o componente pai que o botão de salvar foi clicado
+  @Output() aoAbrir = new EventEmitter<void>();
   @Output() aoSalvar = new EventEmitter<void>();
 
   isModalOpen = false;
 
-  abrirModal() {
+  abrirModal(): void {
+    this.aoAbrir.emit();
     this.isModalOpen = true;
   }
 

@@ -20,7 +20,9 @@
         
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" (click)="fecharModal()">Fechar</button>
-          <button type="button" class="btn btn-primary" (click)="salvar()">{{ textoSalvar }}</button>
+          @if (exibirBotaoSalvar) {
+            <button type="button" class="btn btn-primary" (click)="salvar()">{{ textoSalvar }}</button>
+          }
         </div>
 
       </div>

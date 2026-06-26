@@ -23,8 +23,9 @@ export class Crudgenerico {
   @Input() dados: any[] = [];
 
   // === NOVO: Inputs para receber os templates dos botões de fora ===
-  @Input() templateEditar!: TemplateRef<any>;
-  @Input() templateDeletar!: TemplateRef<any>;
+  @Input() templateEditar?: TemplateRef<any>;
+  @Input() templateDeletar?: TemplateRef<any>;
+  @Input() templateAcoes?: TemplateRef<any>;
 
   @Output() aoSalvar = new EventEmitter<void>();
   @Output() aoEditar = new EventEmitter<any>();
@@ -36,8 +37,8 @@ export class Crudgenerico {
 
   get filteredDados() {
     if (!this.searchTerm) return this.dados;
-    return this.dados.filter(item => 
-      Object.values(item).some(val => 
+    return this.dados.filter(item =>
+      Object.values(item).some(val =>
         String(val).toLowerCase().includes(this.searchTerm.toLowerCase())
       )
     );
@@ -45,11 +46,30 @@ export class Crudgenerico {
 
   get paginatedDados() {
     const start = (this.currentPage - 1) * this.entriesPerPage;
-    return this.filteredDados.slice(start, start + this.entriesPerPage);
+    const end = start + this.entriesPerPage;
+    return this.filteredDados.slice(start, end);
   }
 
-  get totalPages() {
-    return Math.ceil(this.filteredDados.length / this.entriesPerPage);
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.filteredDados.length / this.entriesPerPage));
+  }
+
+  paginaAnterior(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  proximaPagina(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  irParaPagina(pagina: number): void {
+    if (pagina >= 1 && pagina <= this.totalPages) {
+      this.currentPage = pagina;
+    }
   }
 
   onEdit(item: any) { this.aoEditar.emit(item); }

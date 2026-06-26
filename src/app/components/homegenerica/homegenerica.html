@@ -1,9 +1,112 @@
-<app-navbar></app-navbar>
+<div class="container-fluid">
 
-<div class="d-flex">
-  <app-sidebar [itensMenu]="meuMenu"></app-sidebar>
-
-  <div class="flex-grow-1 p-4 bg-light">
-    <app-gerenciar-pets></app-gerenciar-pets>
+  <div>
+    <h1 class="mb-0">Home</h1>
+    <hr class="border border-3 mt-0 mb-4 opacity-100">
   </div>
+
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+
+      <div class="card shadow-sm">
+        <div class="card-body p-4 text-center">
+
+          <i class="bi bi-person-circle avatar-usuario"></i>
+
+          <h2 class="h4 mt-2 mb-4">
+            {{ usuario.nome }}
+          </h2>
+
+          <div class="informacoes-usuario text-start">
+
+            <div class="linha-informacao">
+              <span class="fw-semibold">Nome:</span>
+              <span>{{ usuario.nome }}</span>
+            </div>
+
+            <div class="linha-informacao">
+              <span class="fw-semibold">CPF:</span>
+              <span>{{ usuario.cpf }}</span>
+            </div>
+
+            <div class="linha-informacao">
+              <span class="fw-semibold">E-mail:</span>
+              <span>{{ usuario.email }}</span>
+            </div>
+
+            <div class="linha-informacao">
+              <span class="fw-semibold">Perfil:</span>
+              <span>{{ usuario.perfil }}</span>
+            </div>
+
+          </div>
+
+          <div class="mt-4">
+
+            <app-modalgenerico
+              titulo="Alterar senha"
+              textoBotaoAbrir="Alterar senha"
+              classeBotaoAbrir="btn-primary"
+              textoSalvar="Confirmar"
+              (aoSalvar)="alterarSenha()"
+            >
+
+              <div class="mb-3 text-start">
+                <label
+                  for="senhaAtual"
+                  class="form-label"
+                >
+                  Senha atual
+                </label>
+
+                <input
+                  id="senhaAtual"
+                  type="password"
+                  class="form-control"
+                  [(ngModel)]="senhaAtual"
+                >
+              </div>
+
+              <div class="mb-3 text-start">
+                <label
+                  for="novaSenha"
+                  class="form-label"
+                >
+                  Nova senha
+                </label>
+
+                <input
+                  id="novaSenha"
+                  type="password"
+                  class="form-control"
+                  [(ngModel)]="novaSenha"
+                >
+              </div>
+
+              <div class="mb-3 text-start">
+                <label
+                  for="confirmarNovaSenha"
+                  class="form-label"
+                >
+                  Confirmar nova senha
+                </label>
+
+                <input
+                  id="confirmarNovaSenha"
+                  type="password"
+                  class="form-control"
+                  [(ngModel)]="confirmarNovaSenha"
+                >
+              </div>
+
+            </app-modalgenerico>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>

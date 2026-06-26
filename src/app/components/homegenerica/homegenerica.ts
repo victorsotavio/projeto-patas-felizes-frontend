@@ -1,22 +1,41 @@
 import { Component } from '@angular/core';
-import { Navbar } from "../navbar/navbar";
-import { Sidebar } from "../sidebar/sidebar"; // 1. Importando o Componente correto aqui
-import { SidebarItem } from '../sidebar/sidebar'; // Mantido apenas para tipagem se necessário
-import { GerenciarPetsComponent } from "../gerenciar-pets/gerenciar-pets";
+import { FormsModule } from '@angular/forms';
+
+import { Modalgenerico } from '../modalgenerico/modalgenerico';
 
 @Component({
   selector: 'app-homegenerica',
-  standalone: true, // Garanta que está como standalone se usar o array imports direto
-  imports: [Navbar, Sidebar, GerenciarPetsComponent], // 2. Corrigido para a classe Sidebar
+  standalone: true,
+  imports: [
+    FormsModule,
+    Modalgenerico
+  ],
   templateUrl: './homegenerica.html',
-  styleUrl: './homegenerica.css',
+  styleUrl: './homegenerica.css'
 })
 export class Homegenerica {
-  // Sua lista mapeada perfeitamente
-  meuMenu: SidebarItem[] = [
-    { rotulo: 'Home', rota: '', classeIcone: 'bi-house-door-fill' },
-    { rotulo: 'Dashboard', rota: '/sec', classeIcone: 'bi-speedometer2' },
-    { rotulo: 'Gerenciar Patas 🐾', rota: '/pets', classeIcone: 'bi-paw-fill' },
-    { rotulo: 'Clientes', rota: '/clientes', classeIcone: 'bi-people-fill' }
-  ];
+
+  usuario = {
+    nome: 'Carlos',
+    cpf: '222.222.222-22',
+    email: 'veterinario@patasfelizes.com',
+    perfil: 'Veterinário'
+  };
+
+  senhaAtual = '';
+  novaSenha = '';
+  confirmarNovaSenha = '';
+
+  alterarSenha(): void {
+    if (this.novaSenha !== this.confirmarNovaSenha) {
+      console.log('As novas senhas não coincidem.');
+      return;
+    }
+
+    console.log('Alteração de senha solicitada.');
+
+    this.senhaAtual = '';
+    this.novaSenha = '';
+    this.confirmarNovaSenha = '';
+  }
 }

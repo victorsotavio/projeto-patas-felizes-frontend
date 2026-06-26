@@ -1,0 +1,311 @@
+<app-crudgenerico tituloFuncionalidade="Gerenciar atendimentos" [colunas]="colunasAtendimento" [dados]="dadosTabela"
+    [templateAcoes]="acoesTabela">
+
+    @if (ehSecretaria) {
+    <div acoes-topo>
+
+        <app-modalgenerico titulo="Novo atendimento" textoBotaoAbrir="Novo atendimento"
+            classeBotaoAbrir="btn-success btn-sm" textoSalvar="Cadastrar" (aoSalvar)="cadastrar()">
+
+            <div class="mb-3">
+                <label for="novaDataPrevista" class="form-label">
+                    Data prevista
+                </label>
+
+                <input id="novaDataPrevista" type="datetime-local" class="form-control"
+                    [(ngModel)]="novoAtendimento.dataPrevista">
+            </div>
+
+            <div class="mb-3">
+                <label for="novoAnimal" class="form-label">
+                    Animal
+                </label>
+
+                <select id="novoAnimal" class="form-select" [(ngModel)]="novoAtendimento.idAnimal">
+                    <option [ngValue]="0">
+                        Selecione o animal
+                    </option>
+
+                    @for (animal of listaAnimais; track animal.id) {
+                    <option [ngValue]="animal.id">
+                        {{ animal.nome }}
+                    </option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="novoVeterinario" class="form-label">
+                    Veterinário
+                </label>
+
+                <select id="novoVeterinario" class="form-select" [(ngModel)]="novoAtendimento.idProfissional">
+                    <option [ngValue]="0">
+                        Selecione o veterinário
+                    </option>
+
+                    @for (
+                    veterinario of listaVeterinarios;
+                    track veterinario.id
+                    ) {
+                    <option [ngValue]="veterinario.id">
+                        {{ veterinario.nome }}
+                    </option>
+                    }
+                </select>
+            </div>
+
+        </app-modalgenerico>
+
+    </div>
+    }
+
+</app-crudgenerico>
+
+<ng-template #acoesTabela let-item>
+
+    <app-modalgenerico titulo="Detalhes do atendimento" textoBotaoAbrir="Detalhes"
+        classeBotaoAbrir="btn-outline-secondary btn-sm" [exibirBotaoSalvar]="false" (aoAbrir)="prepararDetalhes(item)">
+
+        @if (atendimentoSelecionado) {
+
+        <div class="detalhes-atendimento">
+
+            <p>
+                <strong>ID:</strong>
+                {{ atendimentoSelecionado.id }}
+            </p>
+
+            <p>
+                <strong>Situação:</strong>
+                {{
+                formatarSituacao(
+                atendimentoSelecionado.situacao
+                )
+                }}
+            </p>
+
+            <p>
+                <strong>Data prevista:</strong>
+                {{
+                formatarData(
+                atendimentoSelecionado.dataPrevista
+                )
+                }}
+            </p>
+
+            <p>
+                <strong>Data realizada:</strong>
+                {{
+                formatarData(
+                atendimentoSelecionado.dataRealizada
+                )
+                }}
+            </p>
+
+            <p>
+                <strong>Animal:</strong>
+                {{ atendimentoSelecionado.nomeAnimal }}
+            </p>
+
+            <p>
+                <strong>Veterinário:</strong>
+                {{ atendimentoSelecionado.nomeProfissional }}
+            </p>
+
+            <p>
+                <strong>Valor total:</strong>
+                {{
+                formatarValor(
+                atendimentoSelecionado.valorTotal
+                )
+                }}
+            </p>
+
+            <hr>
+
+            <h6>Serviços</h6>
+
+            @for (
+            servico of atendimentoSelecionado.servicos;
+            track servico.nome
+            ) {
+            <div class="servico-detalhe">
+                <span>
+                    {{ servico.nome }}
+                    — {{ servico.quantidade }} unidade(s)
+                </span>
+
+                <strong>
+                    {{ formatarValor(servico.subtotal) }}
+                </strong>
+            </div>
+            } @empty {
+            <p class="text-muted">
+                Nenhum serviço registrado.
+            </p>
+            }
+
+            <hr>
+
+            <h6>Diagnóstico</h6>
+
+            <p class="mb-0">
+                {{
+                atendimentoSelecionado.diagnostico
+                || 'Nenhum diagnóstico registrado.'
+                }}
+            </p>
+
+        </div>
+
+        }
+
+    </app-modalgenerico>
+
+    <app-modalgenerico [titulo]="
+      ehVeterinario
+        ? 'Atualizar atendimento'
+        : 'Editar atendimento'
+    " [textoBotaoAbrir]="
+      ehVeterinario
+        ? 'Atualizar'
+        : 'Editar'
+    " classeBotaoAbrir="btn-outline-primary btn-sm" textoSalvar="Salvar" (aoAbrir)="prepararEdicao(item)"
+        (aoSalvar)="salvarEdicao()">
+
+        @if (atendimentoEditar) {
+
+        @if (ehSecretaria) {
+
+        <div class="mb-3">
+            <label for="editarDataPrevista" class="form-label">
+                Data prevista
+            </label>
+
+            <input id="editarDataPrevista" type="datetime-local" class="form-control" [(ngModel)]="
+              atendimentoEditar.dataPrevista
+            ">
+        </div>
+
+        <div class="mb-3">
+            <label for="editarAnimal" class="form-label">
+                Animal
+            </label>
+
+            <select id="editarAnimal" class="form-select" [(ngModel)]="
+              atendimentoEditar.idAnimal
+            ">
+                @for (
+                animal of listaAnimais;
+                track animal.id
+                ) {
+                <option [ngValue]="animal.id">
+                    {{ animal.nome }}
+                </option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="editarVeterinario" class="form-label">
+                Veterinário
+            </label>
+
+            <select id="editarVeterinario" class="form-select" [(ngModel)]="
+              atendimentoEditar.idProfissional
+            ">
+                @for (
+                veterinario of listaVeterinarios;
+                track veterinario.id
+                ) {
+                <option [ngValue]="veterinario.id">
+                    {{ veterinario.nome }}
+                </option>
+                }
+            </select>
+        </div>
+
+        }
+
+        @if (ehVeterinario) {
+
+        <div class="mb-3">
+            <label for="editarSituacao" class="form-label">
+                Situação
+            </label>
+
+            <select id="editarSituacao" class="form-select" [(ngModel)]="
+              atendimentoEditar.situacao
+            ">
+                <option value="AGENDADO">
+                    Agendado
+                </option>
+
+                <option value="EM_ANDAMENTO">
+                    Em andamento
+                </option>
+
+                <option value="REALIZADO">
+                    Realizado
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                Animal
+            </label>
+
+            <input type="text" class="form-control" [value]="atendimentoEditar.nomeAnimal" readonly>
+        </div>
+
+        }
+
+        }
+
+    </app-modalgenerico>
+
+    @if (ehVeterinario) {
+
+    <app-modalgenerico titulo="Registrar diagnóstico" textoBotaoAbrir="Diagnóstico"
+        classeBotaoAbrir="btn-outline-success btn-sm" textoSalvar="Salvar diagnóstico"
+        (aoAbrir)="prepararDiagnostico(item)" (aoSalvar)="salvarDiagnostico()">
+
+        <div class="mb-3">
+            <label for="diagnostico" class="form-label">
+                Diagnóstico
+            </label>
+
+            <textarea id="diagnostico" class="form-control" rows="5" [(ngModel)]="diagnosticoDigitado"
+                placeholder="Informe o diagnóstico do animal"></textarea>
+        </div>
+
+    </app-modalgenerico>
+
+    }
+
+    @if (ehSecretaria) {
+
+    <app-modalgenerico titulo="Confirmar exclusão" textoBotaoAbrir="Excluir"
+        classeBotaoAbrir="btn-outline-danger btn-sm" textoSalvar="Excluir" (aoAbrir)="prepararExclusao(item)"
+        (aoSalvar)="deletar()">
+
+        @if (atendimentoExcluir) {
+        <p class="mb-0">
+            Deseja realmente excluir o atendimento
+            <strong>
+                nº {{ atendimentoExcluir.id }}
+            </strong>
+            do animal
+            <strong>
+                {{ atendimentoExcluir.nomeAnimal }}
+            </strong>?
+        </p>
+        }
+
+    </app-modalgenerico>
+
+    }
+
+</ng-template>

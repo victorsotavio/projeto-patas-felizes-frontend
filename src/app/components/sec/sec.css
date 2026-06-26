@@ -1,0 +1,17 @@
+.area-sistema {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.corpo-sistema {
+    display: flex;
+    flex: 1;
+}
+
+.conteudo-principal {
+    flex: 1;
+    min-width: 0;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+}

@@ -1,0 +1,84 @@
+<app-crudgenerico tituloFuncionalidade="Gerenciar clientes" [colunas]="colunasCliente" [dados]="listaDeClientes"
+    [templateEditar]="btnEditarTabela" [templateDeletar]="btnDeletarTabela">
+
+    <div acoes-topo>
+        <app-modalgenerico titulo="Cadastrar cliente" textoBotaoAbrir="Novo cliente"
+            classeBotaoAbrir="btn-success btn-sm" textoSalvar="Cadastrar" (aoSalvar)="cadastrar()">
+
+            <div class="mb-3">
+                <label for="nomeClienteCadastrar" class="form-label">
+                    Nome
+                </label>
+
+                <input id="nomeClienteCadastrar" type="text" class="form-control" [(ngModel)]="clienteCadastrar.nome">
+            </div>
+
+            <div class="mb-3">
+                <label for="cpfClienteCadastrar" class="form-label">
+                    CPF
+                </label>
+
+                <input id="cpfClienteCadastrar" type="text" class="form-control" [(ngModel)]="clienteCadastrar.cpf">
+            </div>
+
+            <div class="mb-3">
+                <label for="emailClienteCadastrar" class="form-label">
+                    E-mail
+                </label>
+
+                <input id="emailClienteCadastrar" type="email" class="form-control"
+                    [(ngModel)]="clienteCadastrar.email">
+            </div>
+
+        </app-modalgenerico>
+    </div>
+
+</app-crudgenerico>
+
+<ng-template #btnEditarTabela let-cliente>
+
+    <app-modalgenerico titulo="Editar cliente" textoBotaoAbrir="Editar" classeBotaoAbrir="btn-outline-primary btn-sm"
+        textoSalvar="Salvar" (aoAbrir)="prepararEdicao(cliente)" (aoSalvar)="salvarEdicao()">
+
+        <div class="mb-3">
+            <label for="nomeClienteEditar" class="form-label">
+                Nome
+            </label>
+
+            <input id="nomeClienteEditar" type="text" class="form-control" [(ngModel)]="clienteEditar.nome">
+        </div>
+
+        <div class="mb-3">
+            <label for="cpfClienteEditar" class="form-label">
+                CPF
+            </label>
+
+            <input id="cpfClienteEditar" type="text" class="form-control" [(ngModel)]="clienteEditar.cpf">
+        </div>
+
+        <div class="mb-3">
+            <label for="emailClienteEditar" class="form-label">
+                E-mail
+            </label>
+
+            <input id="emailClienteEditar" type="email" class="form-control" [(ngModel)]="clienteEditar.email">
+        </div>
+
+    </app-modalgenerico>
+
+</ng-template>
+
+<ng-template #btnDeletarTabela let-cliente>
+
+    <app-modalgenerico titulo="Confirmar exclusão" textoBotaoAbrir="Excluir"
+        classeBotaoAbrir="btn-outline-danger btn-sm" textoSalvar="Excluir" (aoAbrir)="prepararExclusao(cliente)"
+        (aoSalvar)="deletar()">
+
+        <p class="mb-0">
+            Deseja realmente excluir o cliente
+            <strong>{{ cliente.nome }}</strong>?
+        </p>
+
+    </app-modalgenerico>
+
+</ng-template>
