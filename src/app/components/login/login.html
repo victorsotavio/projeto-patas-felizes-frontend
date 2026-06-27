@@ -10,41 +10,59 @@
 <body class="corVerdeBackground d-flex align-items-center justify-content-center vh-100">
 
   <main class="w-100 px-3" style="max-width: 400px;">
-
+    
     <div class="card border-0 shadow-lg rounded-4">
       <div class="card-body p-5 bg-light rounded-4">
-
-        <form>
-
-          <div class="text-center mb-0">
+        @if (mensagemErro) {
+        <div class="alert alert-danger text-center small py-2 mb-3">
+          {{ mensagemErro }}
+        </div>
+        }
+        <form [formGroup]="formLogin" (ngSubmit)="entrar()">
+          <div class="text-center mb-4">
             <img src="logoCompletoPreto1.png" alt="Logo" class="img-fluid mb-3" style="max-width: 220px;">
             <p class="text-muted mb-0">
 
               Faça login para acessar o sistema.
+
             </p>
           </div>
-
-          <div class="form-floating mb-3">
-            <input
-              type="email"
-              class="form-control"
-              id="floatingInput"
-              placeholder="name@example.com"
-              required>
-            <label for="floatingInput">Endereço de Email</label>
+          <div class="mb-3">
+            <div class="form-floating">
+              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com"
+                formControlName="email" required>
+              <label for="floatingInput">Endereço de Email</label>
+            </div>
+            @if (validarCampo('login', 'required')) {
+            <div class="text-danger small mt-1 ps-1">
+              O login é obrigatório.
+            </div>
+            }
+            @if (validarCampo('login', 'minlength')) {
+            <div class="text-danger small mt-1 ps-1">
+              O login deve ter no mínimo 3 caracteres.
+            </div>
+            }
           </div>
-
-          <div class="form-floating mb-4">
-            <input
-              type="password"
-              class="form-control"
-              id="floatingPassword"
-              placeholder="Senha"
-              required>
-            <label for="floatingPassword">Senha</label>
+          <div class="mb-4">
+            <div class="form-floating">
+              <input type="password" class="form-control" id="floatingPassword" placeholder="Senha"
+                formControlName="senha" required>
+              <label for="floatingPassword">Senha</label>
+            </div>
+            @if (validarCampo('senha', 'required')) {
+            <div class="text-danger small mt-1 ps-1">
+              A senha é obrigatória.
+            </div>
+            }
+            @if (validarCampo('senha', 'minlength')) {
+            <div class="text-danger small mt-1 ps-1">
+              A senha deve ter no mínimo 3 caracteres.
+            </div>
+            }
           </div>
-
-          <button class="btn btn-custom-escuro w-100 py-3 fw-semibold rounded-3" type="submit">
+          <button class="btn btn-custom-escuro w-100 py-3 fw-semibold rounded-3" type="submit"
+            [disabled]="formLogin.invalid">
             Entrar
           </button>
 
@@ -54,7 +72,7 @@
     </div>
 
   </main>
-
+  
 </body>
 
 </html>
