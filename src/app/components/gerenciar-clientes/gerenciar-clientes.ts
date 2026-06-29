@@ -1,6 +1,7 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 import {
     Crudgenerico,
@@ -9,12 +10,8 @@ import {
 
 import { Modalgenerico } from '../modalgenerico/modalgenerico';
 
-interface Cliente {
-    id: number;
-    nome: string;
-    cpf: string;
-    email: string;
-}
+import { Pessoa } from '../../models/pessoa';
+import { PessoaService } from '../../services/pessoa.service';
 
 @Component({
     selector: 'app-gerenciar-clientes',
@@ -28,7 +25,9 @@ interface Cliente {
     templateUrl: './gerenciar-clientes.html',
     styleUrl: './gerenciar-clientes.css'
 })
-export class GerenciarClientesComponent {
+export class GerenciarClientesComponent implements OnInit {
+
+    private readonly pessoaService = inject(PessoaService);
 
     colunasCliente: CrudColuna[] = [
         {
@@ -49,49 +48,172 @@ export class GerenciarClientesComponent {
         }
     ];
 
-    listaDeClientes: Cliente[] = [
-        {
-            id: 1,
-            nome: 'João Silva',
-            cpf: '333.333.333-33',
-            email: 'joao@email.com'
-        },
-        {
-            id: 2,
-            nome: 'Maria Oliveira',
-            cpf: '444.444.444-44',
-            email: 'maria@email.com'
-        }
-    ];
+    listaDeClientes: Pessoa[] = [];
 
-    clienteCadastrar: Omit<Cliente, 'id'> = {
+    clienteCadastrar: Pessoa = {
         nome: '',
         cpf: '',
         email: ''
     };
 
-    clienteEditar: Cliente = {
-        id: 0,
+    clienteEditar: Pessoa = {
         nome: '',
         cpf: '',
         email: ''
     };
 
-    clienteExcluir: Cliente | null = null;
+    clienteExcluir: Pessoa | null = null;
+
+    carregando: boolean = false;
+    mensagemErro: string = '';
+    mensagemSucesso: string = '';
+
+    ngOnInit(): void {
+        this.carregarClientes();
+    }
+
+    carregarClientes(): void {
+        this.carregando = true;
+        this.mensagemErro = '';
+
+        this.pessoaService.listarClientes().subscribe({
+            next: (clientes: Pessoa[]) => {
+                this.listaDeClientes = clientes;
+                this.carregando = false;
+            },
+
+            error: (erro: HttpErrorResponse) => {
+                console.error('Erro ao carregar clientes:', erro);
+
+                this.mensagemErro = this.obterMensagemErro(
+                    erro,
+                    'Não foi possível carregar os clientes.'
+                );
+
+                this.carregando = false;
+            }
+        });
+    }
 
     cadastrar(): void {
-        const maiorId = this.listaDeClientes.reduce(
-            (maior, cliente) => Math.max(maior, cliente.id),
-            0
-        );
+        this.mensagemErro = '';
+        this.mensagemSucesso = '';
 
-        const novoCliente: Cliente = {
-            id: maiorId + 1,
-            ...this.clienteCadastrar
+        const novoCliente: Pessoa = {
+            nome: this.clienteCadastrar.nome,
+            cpf: this.clienteCadastrar.cpf,
+            email: this.clienteCadastrar.email
         };
 
-        this.listaDeClientes.push(novoCliente);
+        this.pessoaService.inserir(novoCliente).subscribe({
+            next: () => {
+                this.mensagemSucesso =
+                    'Cliente cadastrado com sucesso.';
 
+                this.limparFormularioCadastro();
+                this.carregarClientes();
+            },
+
+            error: (erro: HttpErrorResponse) => {
+                console.error('Erro ao cadastrar cliente:', erro);
+
+                this.mensagemErro = this.obterMensagemErro(
+                    erro,
+                    'Não foi possível cadastrar o cliente.'
+                );
+            }
+        });
+    }
+
+    prepararEdicao(cliente: Pessoa): void {
+        this.mensagemErro = '';
+        this.mensagemSucesso = '';
+
+        this.clienteEditar = {
+            ...cliente
+        };
+    }
+
+    salvarEdicao(): void {
+        if (this.clienteEditar.id === undefined) {
+            this.mensagemErro =
+                'Não foi possível identificar o cliente.';
+            return;
+        }
+
+        this.mensagemErro = '';
+        this.mensagemSucesso = '';
+
+        const clienteAlterado: Pessoa = {
+            nome: this.clienteEditar.nome,
+            cpf: this.clienteEditar.cpf,
+            email: this.clienteEditar.email
+        };
+
+        this.pessoaService
+            .alterar(this.clienteEditar.id, clienteAlterado)
+            .subscribe({
+                next: () => {
+                    this.mensagemSucesso =
+                        'Cliente alterado com sucesso.';
+
+                    this.carregarClientes();
+                },
+
+                error: (erro: HttpErrorResponse) => {
+                    console.error('Erro ao alterar cliente:', erro);
+
+                    this.mensagemErro = this.obterMensagemErro(
+                        erro,
+                        'Não foi possível alterar o cliente.'
+                    );
+                }
+            });
+    }
+
+    prepararExclusao(cliente: Pessoa): void {
+        this.mensagemErro = '';
+        this.mensagemSucesso = '';
+
+        this.clienteExcluir = cliente;
+    }
+
+    deletar(): void {
+        if (
+            !this.clienteExcluir ||
+            this.clienteExcluir.id === undefined
+        ) {
+            this.mensagemErro =
+                'Não foi possível identificar o cliente.';
+            return;
+        }
+
+        const idCliente = this.clienteExcluir.id;
+
+        this.mensagemErro = '';
+        this.mensagemSucesso = '';
+
+        this.pessoaService.excluir(idCliente).subscribe({
+            next: () => {
+                this.mensagemSucesso =
+                    'Cliente excluído com sucesso.';
+
+                this.clienteExcluir = null;
+                this.carregarClientes();
+            },
+
+            error: (erro: HttpErrorResponse) => {
+                console.error('Erro ao excluir cliente:', erro);
+
+                this.mensagemErro = this.obterMensagemErro(
+                    erro,
+                    'Não foi possível excluir o cliente.'
+                );
+            }
+        });
+    }
+
+    private limparFormularioCadastro(): void {
         this.clienteCadastrar = {
             nome: '',
             cpf: '',
@@ -99,35 +221,27 @@ export class GerenciarClientesComponent {
         };
     }
 
-    prepararEdicao(cliente: Cliente): void {
-        this.clienteEditar = { ...cliente };
-    }
+    private obterMensagemErro(
+        erro: HttpErrorResponse,
+        mensagemPadrao: string
+    ): string {
 
-    salvarEdicao(): void {
-        const index = this.listaDeClientes.findIndex(
-            cliente => cliente.id === this.clienteEditar.id
-        );
-
-        if (index !== -1) {
-            this.listaDeClientes[index] = {
-                ...this.clienteEditar
-            };
-        }
-    }
-
-    prepararExclusao(cliente: Cliente): void {
-        this.clienteExcluir = cliente;
-    }
-
-    deletar(): void {
-        if (!this.clienteExcluir) {
-            return;
+        if (typeof erro.error === 'string' && erro.error) {
+            return erro.error;
         }
 
-        this.listaDeClientes = this.listaDeClientes.filter(
-            cliente => cliente.id !== this.clienteExcluir?.id
-        );
+        if (erro.error?.message) {
+            return erro.error.message;
+        }
 
-        this.clienteExcluir = null;
+        if (erro.error?.mensagem) {
+            return erro.error.mensagem;
+        }
+
+        if (erro.error?.error) {
+            return erro.error.error;
+        }
+
+        return mensagemPadrao;
     }
 }

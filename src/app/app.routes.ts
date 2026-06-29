@@ -9,6 +9,8 @@ import { GerenciarPetsComponent } from './components/gerenciar-pets/gerenciar-pe
 import { Modalgenerico } from './components/modalgenerico/modalgenerico';
 import {GerenciarClientesComponent} from './components/gerenciar-clientes/gerenciar-clientes';
 import {GerenciarAtendimentosComponent} from './components/gerenciar-atendimentos/gerenciar-atendimentos';
+import { authGuard } from './guards/auth-guard';
+import {perfilGuard} from './guards/perfil-guard';
 
 export const routes: Routes = [
   {
@@ -19,6 +21,10 @@ export const routes: Routes = [
   {
     path: 'sec',
     component: Sec,
+    canActivate: [authGuard, perfilGuard],
+    data: {
+      perfisPermitidos: ['SECRETARIA']
+    },
     children: [
       {
         path: '',
@@ -50,6 +56,10 @@ export const routes: Routes = [
   {
     path: 'vet',
     component: Vet,
+    canActivate: [authGuard, perfilGuard],
+    data:{
+      perfisPermitidos: ['VETERINARIO']
+    },
     children: [
       {
         path: '',

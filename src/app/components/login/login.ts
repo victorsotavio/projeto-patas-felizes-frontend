@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AutenticacaoService } from '../../services/autenticacaoService';
+import { AutenticacaoService } from '../../services/autenticacao.service';
 import { Credencial } from '../../models/credencial';
 
 @Component({
@@ -27,38 +27,42 @@ export class Login {
     });
   }
 
-entrar(): void {
-  if (this.formLogin.invalid) {
-    this.formLogin.markAllAsTouched();
-    return;
-  }
-
-  const credencial: Credencial = this.formLogin.value;
-
-  this.autenticacaoService.login(credencial).subscribe({
-    next: (usuario) => {
-      this.autenticacaoService.salvarUsuario(usuario);
-
-      switch (usuario.perfil) {
-        case 'ADMINISTRADOR':
-          this.router.navigate(['/admin']);
-          break;
-        case 'VETERINARIO':
-          this.router.navigate(['/vet']);
-          break;
-        case 'SECRETARIA':
-          this.router.navigate(['/sec']);
-          break;
-        default:
-          this.router.navigate(['/']);
-          break;
-      }
-    },
-    error: () => {
-      this.mensagemErro = 'Login ou senha inválidos.';
+  entrar(): void {
+    if (this.formLogin.invalid) {
+      this.formLogin.markAllAsTouched();
+      return;
     }
-  });
-}
+
+    const credencial: Credencial = this.formLogin.value;
+
+    this.autenticacaoService.login(credencial).subscribe({
+      next: (usuario) => {
+        console.log('Login retornado pelo backend:', usuario);
+
+        this.autenticacaoService.salvarUsuario(usuario);
+
+        switch (usuario.perfil) {
+          case 'SECRETARIA':
+            this.router.navigate(['/sec']);
+            break;
+
+          case 'VETERINARIO':
+            this.router.navigate(['/vet']);
+            break;
+
+          case 'CLIENTE':
+            this.autenticacaoService.sair();
+            
+            this.mensagemErro =
+              'O perfil de cliente ainda não possui acesso ao sistema.';
+            break;
+        }
+      },
+      error: () => {
+        this.mensagemErro = 'Login ou senha inválidos.';
+      }
+    });
+  }
 
   validarCampo(campo: string, erro: string): boolean {
     const controle = this.formLogin.get(campo);

@@ -1,21 +1,29 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { HttpErrorResponse } from "@angular/common/http";
 
-import {
-    Crudgenerico,
-    CrudColuna
-} from '../crudgenerico/crudgenerico';
+import { Animal } from '../../models/animal';
+import { Usuario } from '../../models/usuario';
+
+import { AnimalService } from '../../services/animal.service';
+import { UsuarioService } from '../../services/usuario.service';
+
+import { Crudgenerico, CrudColuna } from '../crudgenerico/crudgenerico';
 
 import { Modalgenerico } from '../modalgenerico/modalgenerico';
+
+import { Atendimento as AtendimentoBackend } from '../../models/atendimento';
+import { AtendimentoService } from '../../services/atendimento.service';
 
 type PerfilTela = 'SECRETARIA' | 'VETERINARIO';
 
 type SituacaoAtendimento =
     | 'AGENDADO'
     | 'EM_ANDAMENTO'
-    | 'REALIZADO';
+    | 'REALIZADO'
+    | 'CANCELADO';
 
 interface ServicoAtendimento {
     nome: string;
@@ -52,6 +60,11 @@ interface AtendimentoTabela {
     valorTotalExibicao: string;
 }
 
+interface VeterinarioOpcao {
+    id: number;
+    nome: string;
+}
+
 @Component({
     selector: 'app-gerenciar-atendimentos',
     standalone: true,
@@ -64,9 +77,12 @@ interface AtendimentoTabela {
     templateUrl: './gerenciar-atendimentos.html',
     styleUrl: './gerenciar-atendimentos.css'
 })
-export class GerenciarAtendimentosComponent {
+export class GerenciarAtendimentosComponent implements OnInit {
 
-    private route = inject(ActivatedRoute);
+    private readonly route = inject(ActivatedRoute);
+    private readonly atendimentoService = inject(AtendimentoService);
+    private readonly animalService = inject(AnimalService);
+    private readonly usuarioService = inject(UsuarioService);
 
     perfil: PerfilTela =
         this.route.snapshot.data['perfil'] ?? 'SECRETARIA';
@@ -102,84 +118,7 @@ export class GerenciarAtendimentosComponent {
         }
     ];
 
-    listaAnimais = [
-        {
-            id: 1,
-            nome: 'Rex'
-        },
-        {
-            id: 2,
-            nome: 'Mia'
-        },
-        {
-            id: 3,
-            nome: 'Bolinha'
-        }
-    ];
 
-    listaVeterinarios = [
-        {
-            id: 2,
-            nome: 'Carlos'
-        }
-    ];
-
-    listaAtendimentos: Atendimento[] = [
-        {
-            id: 1,
-            situacao: 'AGENDADO',
-            dataPrevista: '2026-06-30T14:00',
-            dataRealizada: null,
-            idAnimal: 1,
-            nomeAnimal: 'Rex',
-            idProfissional: 2,
-            nomeProfissional: 'Carlos',
-            valorTotal: 0,
-            diagnostico: null,
-            servicos: []
-        },
-        {
-            id: 2,
-            situacao: 'REALIZADO',
-            dataPrevista: '2026-06-20T10:00',
-            dataRealizada: '2026-06-20T10:30',
-            idAnimal: 3,
-            nomeAnimal: 'Bolinha',
-            idProfissional: 2,
-            nomeProfissional: 'Carlos',
-            valorTotal: 150,
-            diagnostico:
-                'Bolinha apresentou leve alergia. Prescrito antialérgico e repouso.',
-            servicos: [
-                {
-                    nome: 'Consulta de Rotina',
-                    quantidade: 1,
-                    valor: 150,
-                    subtotal: 150
-                }
-            ]
-        },
-        {
-            id: 3,
-            situacao: 'EM_ANDAMENTO',
-            dataPrevista: '2026-06-26T13:00',
-            dataRealizada: null,
-            idAnimal: 2,
-            nomeAnimal: 'Mia',
-            idProfissional: 2,
-            nomeProfissional: 'Carlos',
-            valorTotal: 200,
-            diagnostico: null,
-            servicos: [
-                {
-                    nome: 'Ultrassonografia',
-                    quantidade: 1,
-                    valor: 200,
-                    subtotal: 200
-                }
-            ]
-        }
-    ];
 
     novoAtendimento = {
         dataPrevista: '',
@@ -199,6 +138,107 @@ export class GerenciarAtendimentosComponent {
 
     get ehVeterinario(): boolean {
         return this.perfil === 'VETERINARIO';
+    }
+
+    listaAtendimentos: Atendimento[] = [];
+    listaAnimais: Animal[] = [];
+    listaVeterinarios: VeterinarioOpcao[] = [];
+
+    carregandoAtendimentos: boolean = false;
+    mensagemErroAtendimentos: string = '';
+
+    ngOnInit(): void {
+        this.carregarAtendimentos();
+        this.carregarAnimais();
+        this.carregarVeterinarios();
+    }
+
+    carregarAtendimentos(): void {
+        this.carregandoAtendimentos = true;
+        this.mensagemErroAtendimentos = '';
+
+        this.atendimentoService.listar().subscribe({
+            next: (
+                atendimentos: AtendimentoBackend[]
+            ) => {
+                this.listaAtendimentos =
+                    atendimentos.map(atendimento => ({
+                        id: atendimento.id,
+                        situacao: atendimento.situacao,
+                        dataPrevista: atendimento.dataPrevista,
+                        dataRealizada: atendimento.dataRealizada,
+
+                        idAnimal: atendimento.idAnimal,
+                        nomeAnimal: atendimento.nomeAnimal,
+
+                        idProfissional:
+                            atendimento.idPessoaProfissional,
+
+                        nomeProfissional:
+                            atendimento.nomeProfissional,
+
+                        valorTotal: atendimento.valorTotal,
+                        diagnostico: null,
+                        servicos: []
+                    }));
+
+                this.carregandoAtendimentos = false;
+            },
+
+            error: (erro: HttpErrorResponse) => {
+                console.error(
+                    'Erro ao carregar atendimentos:',
+                    erro
+                );
+
+                this.mensagemErroAtendimentos =
+                    'Não foi possível carregar os atendimentos.';
+
+                this.carregandoAtendimentos = false;
+            }
+        });
+    }
+
+    carregarAnimais(): void {
+        this.animalService.listar().subscribe({
+            next: (animais: Animal[]) => {
+                this.listaAnimais = animais;
+            },
+
+            error: (erro: HttpErrorResponse) => {
+                console.error(
+                    'Erro ao carregar animais:',
+                    erro
+                );
+
+                this.mensagemErroAtendimentos =
+                    'Não foi possível carregar os animais.';
+            }
+        });
+    }
+
+    carregarVeterinarios(): void {
+        this.usuarioService
+            .listarVeterinarios()
+            .subscribe({
+                next: (veterinarios: Usuario[]) => {
+                    this.listaVeterinarios =
+                        veterinarios.map(veterinario => ({
+                            id: veterinario.pessoaId,
+                            nome: veterinario.nomePessoa
+                        }));
+                },
+
+                error: (erro: HttpErrorResponse) => {
+                    console.error(
+                        'Erro ao carregar veterinários:',
+                        erro
+                    );
+
+                    this.mensagemErroAtendimentos =
+                        'Não foi possível carregar os veterinários.';
+                }
+            });
     }
 
     get dadosTabela(): AtendimentoTabela[] {
@@ -405,7 +445,8 @@ export class GerenciarAtendimentosComponent {
         const situacoes: Record<SituacaoAtendimento, string> = {
             AGENDADO: 'Agendado',
             EM_ANDAMENTO: 'Em andamento',
-            REALIZADO: 'Realizado'
+            REALIZADO: 'Realizado',
+            CANCELADO: 'Cancelado'
         };
 
         return situacoes[situacao];

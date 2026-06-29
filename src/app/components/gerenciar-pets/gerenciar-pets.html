@@ -1,40 +1,174 @@
+@if (carregando) {
+  <div class="alert alert-info mx-3 mt-3">
+    Carregando animais...
+  </div>
+}
+
+@if (mensagemSucesso) {
+  <div class="alert alert-success mx-3 mt-3">
+    {{ mensagemSucesso }}
+  </div>
+}
+
+@if (mensagemErro) {
+  <div class="alert alert-danger mx-3 mt-3">
+    {{ mensagemErro }}
+  </div>
+}
+
 <app-crudgenerico
-  tituloFuncionalidade="Cadastro de Patas"
+  tituloFuncionalidade="Gerenciar animais"
   [colunas]="colunasPet"
   [dados]="listaDePets"
   [templateEditar]="btnEditarTabela"
-  [templateDeletar]="btnDeletarTabela">
+  [templateDeletar]="btnDeletarTabela"
+>
 
   <div acoes-topo>
-    <app-modalgenerico titulo="Adicionar Novo Pet" textoBotaoAbrir="Novo Pet 🐾" classeBotaoAbrir="btn-success" (aoSalvar)="cadastrar()">
+
+    <app-modalgenerico
+      titulo="Cadastrar animal"
+      textoBotaoAbrir="Novo animal"
+      classeBotaoAbrir="btn-success btn-sm"
+      textoSalvar="Cadastrar"
+      (aoSalvar)="cadastrar()"
+    >
+
       <div class="mb-3">
-        <label>Nome:</label>
-        <input type="text" class="form-control" [(ngModel)]="petCadastrar.nome">
+        <label
+          for="nomeAnimalCadastrar"
+          class="form-label"
+        >
+          Nome
+        </label>
+
+        <input
+          id="nomeAnimalCadastrar"
+          type="text"
+          class="form-control"
+          [(ngModel)]="petCadastrar.nome"
+        >
       </div>
+
       <div class="mb-3">
-        <label>Espécie:</label>
-        <input type="text" class="form-control" [(ngModel)]="petCadastrar.especie">
+        <label
+          for="donoAnimalCadastrar"
+          class="form-label"
+        >
+          Dono
+        </label>
+
+        <select
+          id="donoAnimalCadastrar"
+          class="form-select"
+          [(ngModel)]="petCadastrar.idPessoaDono"
+        >
+          <option
+            [ngValue]="0"
+            disabled
+          >
+            Selecione o dono
+          </option>
+
+          @for (
+            cliente of listaDeClientes;
+            track cliente.id
+          ) {
+            @if (cliente.id !== undefined) {
+              <option [ngValue]="cliente.id">
+                {{ cliente.nome }}
+              </option>
+            }
+          }
+        </select>
       </div>
+
     </app-modalgenerico>
+
   </div>
 
 </app-crudgenerico>
 
 <ng-template #btnEditarTabela let-pet>
-  <app-modalgenerico titulo="Editar Informações" textoBotaoAbrir="Edit" classeBotaoAbrir="btn-primary btn-sm px-3" (click)="petEditar = { ...pet }" (aoSalvar)="salvarEdicao()">
+
+  <app-modalgenerico
+    titulo="Editar animal"
+    textoBotaoAbrir="Editar"
+    classeBotaoAbrir="btn-outline-primary btn-sm"
+    textoSalvar="Salvar"
+    (aoAbrir)="prepararEdicao(pet)"
+    (aoSalvar)="salvarEdicao()"
+  >
+
     <div class="mb-3">
-      <label>Nome:</label>
-      <input type="text" class="form-control" [(ngModel)]="petEditar.nome">
+      <label
+        for="nomeAnimalEditar"
+        class="form-label"
+      >
+        Nome
+      </label>
+
+      <input
+        id="nomeAnimalEditar"
+        type="text"
+        class="form-control"
+        [(ngModel)]="petEditar.nome"
+      >
     </div>
+
     <div class="mb-3">
-      <label>Espécie:</label>
-      <input type="text" class="form-control" [(ngModel)]="petEditar.especie">
+      <label
+        for="donoAnimalEditar"
+        class="form-label"
+      >
+        Dono
+      </label>
+
+      <select
+        id="donoAnimalEditar"
+        class="form-select"
+        [(ngModel)]="petEditar.idPessoaDono"
+      >
+        <option
+          [ngValue]="0"
+          disabled
+        >
+          Selecione o dono
+        </option>
+
+        @for (
+          cliente of listaDeClientes;
+          track cliente.id
+        ) {
+          @if (cliente.id !== undefined) {
+            <option [ngValue]="cliente.id">
+              {{ cliente.nome }}
+            </option>
+          }
+        }
+      </select>
     </div>
+
   </app-modalgenerico>
+
 </ng-template>
 
 <ng-template #btnDeletarTabela let-pet>
-  <app-modalgenerico titulo="Atenção!" textoBotaoAbrir="Delete" classeBotaoAbrir="btn-danger btn-sm px-3" (click)="petExcluir = pet" (aoSalvar)="deletar()">
-    <p>Você tem certeza que deseja excluir o cadastro do pet <strong>{{ pet.nome }}</strong>?</p>
+
+  <app-modalgenerico
+    titulo="Confirmar exclusão"
+    textoBotaoAbrir="Excluir"
+    classeBotaoAbrir="btn-outline-danger btn-sm"
+    textoSalvar="Excluir"
+    (aoAbrir)="prepararExclusao(pet)"
+    (aoSalvar)="deletar()"
+  >
+
+    <p class="mb-0">
+      Deseja realmente excluir o animal
+      <strong>{{ pet.nome }}</strong>?
+    </p>
+
   </app-modalgenerico>
+
 </ng-template>

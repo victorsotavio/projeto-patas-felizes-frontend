@@ -1,14 +1,25 @@
-import { Animal } from "./animal";
-import { AtendimentoServico } from "./atendimento-servico";
-import { Pessoa } from "./pessoa";
+export type SituacaoAtendimento =
+    | 'AGENDADO'
+    | 'EM_ANDAMENTO'
+    | 'REALIZADO'
+    | 'CANCELADO';
 
 export interface Atendimento {
-    id?: number;
-    dataPrevista: string; // ISO String (LocalDateTime)
-    dataRealizada?: string; // Opcional (pode ser nulo no Java)
-    situacao: 'AGENDADO' | 'EM_ANDAMENTO' | 'CONCLUIDO' | 'CANCELADO' | string; // Ajuste conforme seu SituacaoAtendimento.java
+    id: number;
+    dataPrevista: string;
+    dataRealizada: string | null;
+    situacao: SituacaoAtendimento;
     valorTotal: number;
-    animal: Animal;
-    profissional: Pessoa;
-    servicos: AtendimentoServico[];
+    idAnimal: number;
+    nomeAnimal: string;
+    idPessoaProfissional: number;
+    nomeProfissional: string;
+}
+
+export interface AtendimentoRequest {
+    dataPrevista: string;
+    dataRealizada: string | null;
+    situacao: SituacaoAtendimento;
+    idAnimal: number;
+    idPessoaProfissional: number;
 }

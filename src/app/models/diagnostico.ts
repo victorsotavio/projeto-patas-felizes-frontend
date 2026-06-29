@@ -1,7 +1,10 @@
-import { Atendimento } from "./atendimento";
-
 export interface Diagnostico {
-    id?: number;
+    id: number;
     descricao: string;
-    atendimento: Atendimento;
+    idAtendimento: number;
+}
+
+export interface DiagnosticoRequest {
+    descricao: string;
+    idAtendimento: number;
 }

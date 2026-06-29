@@ -1,0 +1,13 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+input.form-control,
+select.form-select {
+    width: 100%;
+}

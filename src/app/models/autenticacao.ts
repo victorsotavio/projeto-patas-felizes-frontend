@@ -1,7 +1,7 @@
 export interface Autenticacao {
     id: number;
     email: string;
-    perfil: 'ADMINISTRADOR' | 'VETERINARIO' | 'SECRETARIA';
+    perfil: 'SECRETARIA' | 'VETERINARIO' | 'CLIENTE';
     pessoaId: number;
     nomePessoa: string;
 }

@@ -5,6 +5,26 @@
     <hr class="border border-3 mt-0 mb-4 opacity-100">
   </div>
 
+  @if (carregando) {
+  <div class="alert alert-info">
+    Carregando dados do usuário...
+  </div>
+  }
+
+  @if (mensagemSucesso) {
+  <div class="alert alert-success">
+    {{ mensagemSucesso }}
+  </div>
+  }
+
+  @if (mensagemErro) {
+  <div class="alert alert-danger">
+    {{ mensagemErro }}
+  </div>
+  }
+
+  @if (usuario) {
+
   <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
 
@@ -26,7 +46,7 @@
 
             <div class="linha-informacao">
               <span class="fw-semibold">CPF:</span>
-              <span>{{ usuario.cpf }}</span>
+              <span>{{ usuario.cpf | cpf }}</span>
             </div>
 
             <div class="linha-informacao">
@@ -36,67 +56,38 @@
 
             <div class="linha-informacao">
               <span class="fw-semibold">Perfil:</span>
-              <span>{{ usuario.perfil }}</span>
+              <span>{{ perfilExibicao }}</span>
             </div>
 
           </div>
 
           <div class="mt-4">
 
-            <app-modalgenerico
-              titulo="Alterar senha"
-              textoBotaoAbrir="Alterar senha"
-              classeBotaoAbrir="btn-primary"
-              textoSalvar="Confirmar"
-              (aoSalvar)="alterarSenha()"
-            >
+            <app-modalgenerico titulo="Alterar senha" textoBotaoAbrir="Alterar senha" classeBotaoAbrir="btn-primary"
+              textoSalvar="Confirmar" (aoSalvar)="alterarSenha()">
 
               <div class="mb-3 text-start">
-                <label
-                  for="senhaAtual"
-                  class="form-label"
-                >
+                <label for="senhaAtual" class="form-label">
                   Senha atual
                 </label>
 
-                <input
-                  id="senhaAtual"
-                  type="password"
-                  class="form-control"
-                  [(ngModel)]="senhaAtual"
-                >
+                <input id="senhaAtual" type="password" class="form-control" [(ngModel)]="senhaAtual">
               </div>
 
               <div class="mb-3 text-start">
-                <label
-                  for="novaSenha"
-                  class="form-label"
-                >
+                <label for="novaSenha" class="form-label">
                   Nova senha
                 </label>
 
-                <input
-                  id="novaSenha"
-                  type="password"
-                  class="form-control"
-                  [(ngModel)]="novaSenha"
-                >
+                <input id="novaSenha" type="password" class="form-control" [(ngModel)]="novaSenha">
               </div>
 
               <div class="mb-3 text-start">
-                <label
-                  for="confirmarNovaSenha"
-                  class="form-label"
-                >
+                <label for="confirmarNovaSenha" class="form-label">
                   Confirmar nova senha
                 </label>
 
-                <input
-                  id="confirmarNovaSenha"
-                  type="password"
-                  class="form-control"
-                  [(ngModel)]="confirmarNovaSenha"
-                >
+                <input id="confirmarNovaSenha" type="password" class="form-control" [(ngModel)]="confirmarNovaSenha">
               </div>
 
             </app-modalgenerico>
@@ -108,5 +99,6 @@
 
     </div>
   </div>
+  }
 
 </div>

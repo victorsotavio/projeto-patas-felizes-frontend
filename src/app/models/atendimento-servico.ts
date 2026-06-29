@@ -1,10 +1,15 @@
-import { Atendimento } from "./atendimento";
-import { Servico } from "./servico";
-
 export interface AtendimentoServico {
-    id?: number;
+    id: number;
+    idAtendimento: number;
+    idServico: number;
+    nomeServico: string;
     quantidade: number;
     valor: number;
-    atendimento?: Atendimento;
-    servico: Servico;
+    subTotal: number;
+}
+
+export interface AtendimentoServicoRequest {
+    quantidade: number;
+    idAtendimento: number;
+    idServico: number;
 }

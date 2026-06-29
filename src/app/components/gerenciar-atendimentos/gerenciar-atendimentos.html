@@ -1,3 +1,15 @@
+@if (carregandoAtendimentos) {
+<div class="alert alert-info mx-3 mt-3">
+    Carregando atendimentos...
+</div>
+}
+
+@if (mensagemErroAtendimentos) {
+<div class="alert alert-danger mx-3 mt-3">
+    {{ mensagemErroAtendimentos }}
+</div>
+}
+
 <app-crudgenerico tituloFuncionalidade="Gerenciar atendimentos" [colunas]="colunasAtendimento" [dados]="dadosTabela"
     [templateAcoes]="acoesTabela">
 

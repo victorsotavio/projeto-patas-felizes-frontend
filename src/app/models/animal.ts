@@ -1,7 +1,12 @@
 import { Pessoa } from "./pessoa";
 
 export interface Animal {
-    id?: number;
+    id: number;
     nome: string;
-    pessoa?: Pessoa; // Dono do animal
+    idPessoaDono: number; // Dono do animal
+}
+
+export interface AnimalRequest {
+    nome: string;
+    idPessoaDono: number; // Dono do animal
 }

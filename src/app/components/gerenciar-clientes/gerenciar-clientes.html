@@ -1,3 +1,21 @@
+@if (carregando) {
+<div class="alert alert-info mx-3 mt-3">
+    Carregando clientes...
+</div>
+}
+
+@if (mensagemSucesso) {
+<div class="alert alert-success mx-3 mt-3">
+    {{ mensagemSucesso }}
+</div>
+}
+
+@if (mensagemErro) {
+<div class="alert alert-danger mx-3 mt-3">
+    {{ mensagemErro }}
+</div>
+}
+
 <app-crudgenerico tituloFuncionalidade="Gerenciar clientes" [colunas]="colunasCliente" [dados]="listaDeClientes"
     [templateEditar]="btnEditarTabela" [templateDeletar]="btnDeletarTabela">
 
