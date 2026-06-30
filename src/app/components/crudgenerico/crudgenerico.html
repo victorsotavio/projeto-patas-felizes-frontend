@@ -10,7 +10,7 @@
       <div class="row mb-3 align-items-center">
 
         <div class="col-sm-5 d-flex align-items-center">
-          <label class="me-2 text-secondary">Show</label>
+          <label class="me-2 text-secondary">Mostrar</label>
 
           <select class="form-select form-select-sm w-auto" [(ngModel)]="entriesPerPage" (change)="currentPage = 1">
             <option [value]="5">5</option>
@@ -18,13 +18,13 @@
             <option [value]="25">25</option>
           </select>
 
-          <label class="ms-2 text-secondary">entries</label>
+          <label class="ms-2 text-secondary">Entradas</label>
         </div>
 
         <div class="col-sm-7 d-flex justify-content-sm-end
                 align-items-center gap-2 mt-2 mt-sm-0">
           <label class="text-secondary flex-shrink-0">
-            Search:
+            Buscar:
           </label>
 
           <input type="search" class="form-control form-control-sm w-auto" [(ngModel)]="searchTerm"
@@ -110,19 +110,19 @@
               align-items-center mt-3 text-secondary small">
 
         <div>
-          Showing
+          Mostrando de
           {{
           filteredDados.length === 0
           ? 0
           : (currentPage - 1) * entriesPerPage + 1
           }}
-          to
+          até
           {{
           currentPage * entriesPerPage > filteredDados.length
           ? filteredDados.length
           : currentPage * entriesPerPage
           }}
-          of {{ filteredDados.length }} entries
+          de {{ filteredDados.length }} entradas
         </div>
 
         <nav class="mt-2 mt-sm-0">
