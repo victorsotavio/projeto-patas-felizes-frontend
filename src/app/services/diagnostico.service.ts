@@ -27,6 +27,17 @@ export class DiagnosticoService {
         );
     }
 
+    alterar(
+        id: number,
+        diagnostico: DiagnosticoRequest
+    ): Observable<Diagnostico> {
+
+        return this.http.put<Diagnostico>(
+            `${this.apiUrl}/${id}`,
+            diagnostico
+        );
+    }
+
     buscarPorId(
         id: number
     ): Observable<Diagnostico> {

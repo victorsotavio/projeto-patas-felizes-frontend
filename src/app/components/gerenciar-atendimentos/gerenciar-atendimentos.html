@@ -4,6 +4,12 @@
 </div>
 }
 
+@if (mensagemSucessoAtendimentos) {
+<div class="alert alert-success mx-3 mt-3">
+    {{ mensagemSucessoAtendimentos }}
+</div>
+}
+
 @if (mensagemErroAtendimentos) {
 <div class="alert alert-danger mx-3 mt-3">
     {{ mensagemErroAtendimentos }}
@@ -24,8 +30,9 @@
                     Data prevista
                 </label>
 
-                <input id="novaDataPrevista" type="datetime-local" class="form-control"
-                    [(ngModel)]="novoAtendimento.dataPrevista">
+                <input id="novaDataPrevista" type="datetime-local" class="form-control" [(ngModel)]="
+                        novoAtendimento.dataPrevista
+                    ">
             </div>
 
             <div class="mb-3">
@@ -33,12 +40,18 @@
                     Animal
                 </label>
 
-                <select id="novoAnimal" class="form-select" [(ngModel)]="novoAtendimento.idAnimal">
+                <select id="novoAnimal" class="form-select" [(ngModel)]="
+                        novoAtendimento.idAnimal
+                    ">
+
                     <option [ngValue]="0">
                         Selecione o animal
                     </option>
 
-                    @for (animal of listaAnimais; track animal.id) {
+                    @for (
+                    animal of listaAnimais;
+                    track animal.id
+                    ) {
                     <option [ngValue]="animal.id">
                         {{ animal.nome }}
                     </option>
@@ -51,7 +64,10 @@
                     Veterinário
                 </label>
 
-                <select id="novoVeterinario" class="form-select" [(ngModel)]="novoAtendimento.idProfissional">
+                <select id="novoVeterinario" class="form-select" [(ngModel)]="
+                        novoAtendimento.idProfissional
+                    ">
+
                     <option [ngValue]="0">
                         Selecione o veterinário
                     </option>
@@ -75,6 +91,8 @@
 </app-crudgenerico>
 
 <ng-template #acoesTabela let-item>
+
+    <!-- Detalhes: disponível para qualquer situação -->
 
     <app-modalgenerico titulo="Detalhes do atendimento" textoBotaoAbrir="Detalhes"
         classeBotaoAbrir="btn-outline-secondary btn-sm" [exibirBotaoSalvar]="false" (aoAbrir)="prepararDetalhes(item)">
@@ -140,17 +158,27 @@
 
             @for (
             servico of atendimentoSelecionado.servicos;
-            track servico.nome
+            track servico.id
             ) {
-            <div class="servico-detalhe">
-                <span>
-                    {{ servico.nome }}
-                    — {{ servico.quantidade }} unidade(s)
-                </span>
+            <div class="d-flex justify-content-between
+                       align-items-center border-bottom py-2">
+
+                <div>
+                    <div class="fw-semibold">
+                        {{ servico.nome }}
+                    </div>
+
+                    <small class="text-muted">
+                        {{ servico.quantidade }}
+                        unidade(s) ×
+                        {{ formatarValor(servico.valor) }}
+                    </small>
+                </div>
 
                 <strong>
                     {{ formatarValor(servico.subtotal) }}
                 </strong>
+
             </div>
             } @empty {
             <p class="text-muted">
@@ -175,18 +203,24 @@
 
     </app-modalgenerico>
 
+    <!-- Editar/Atualizar: apenas enquanto não estiver encerrado -->
+
+    @if (podeEditarAtendimento(item)) {
+
     <app-modalgenerico [titulo]="
-      ehVeterinario
-        ? 'Atualizar atendimento'
-        : 'Editar atendimento'
-    " [textoBotaoAbrir]="
-      ehVeterinario
-        ? 'Atualizar'
-        : 'Editar'
-    " classeBotaoAbrir="btn-outline-primary btn-sm" textoSalvar="Salvar" (aoAbrir)="prepararEdicao(item)"
-        (aoSalvar)="salvarEdicao()">
+            ehVeterinario
+                ? 'Atualizar atendimento'
+                : 'Editar atendimento'
+        " [textoBotaoAbrir]="
+            ehVeterinario
+                ? 'Atualizar'
+                : 'Editar'
+        " classeBotaoAbrir="btn-outline-primary btn-sm" textoSalvar="Salvar" [exibirBotaoSalvar]="ehSecretaria"
+        (aoAbrir)="prepararEdicao(item)" (aoSalvar)="salvarEdicao()">
 
         @if (atendimentoEditar) {
+
+        <!-- Campos da secretária -->
 
         @if (ehSecretaria) {
 
@@ -196,8 +230,8 @@
             </label>
 
             <input id="editarDataPrevista" type="datetime-local" class="form-control" [(ngModel)]="
-              atendimentoEditar.dataPrevista
-            ">
+                    atendimentoEditar.dataPrevista
+                ">
         </div>
 
         <div class="mb-3">
@@ -205,8 +239,10 @@
                 Animal
             </label>
 
-            <select id="editarAnimal" class="form-select" [(ngModel)]="atendimentoEditar.idAnimal
-            ">
+            <select id="editarAnimal" class="form-select" [(ngModel)]="
+                    atendimentoEditar.idAnimal
+                ">
+
                 @for (
                 animal of listaAnimais;
                 track animal.id
@@ -215,6 +251,7 @@
                     {{ animal.nome }}
                 </option>
                 }
+
             </select>
         </div>
 
@@ -223,7 +260,10 @@
                 Veterinário
             </label>
 
-            <select id="editarVeterinario" class="form-select" [(ngModel)]="atendimentoEditar.idProfissional">
+            <select id="editarVeterinario" class="form-select" [(ngModel)]="
+                    atendimentoEditar.idProfissional
+                ">
+
                 @for (
                 veterinario of listaVeterinarios;
                 track veterinario.id
@@ -232,10 +272,13 @@
                     {{ veterinario.nome }}
                 </option>
                 }
+
             </select>
         </div>
 
         }
+
+        <!-- Campos do veterinário -->
 
         @if (ehVeterinario) {
 
@@ -244,18 +287,19 @@
                 Situação
             </label>
 
-            <select id="editarSituacao" class="form-select" [(ngModel)]="atendimentoEditar.situacao">
-                <option value="AGENDADO">
-                    Agendado
-                </option>
+            <select id="editarSituacao" class="form-select" [(ngModel)]="
+                    atendimentoEditar.situacao
+                ">
 
-                <option value="EM_ANDAMENTO">
-                    Em andamento
+                @for (
+                situacao of situacoesDisponiveisEdicao;
+                track situacao
+                ) {
+                <option [ngValue]="situacao">
+                    {{ formatarSituacao(situacao) }}
                 </option>
+                }
 
-                <option value="REALIZADO">
-                    Realizado
-                </option>
             </select>
         </div>
 
@@ -267,17 +311,222 @@
             <input type="text" class="form-control" [value]="atendimentoEditar.nomeAnimal" readonly>
         </div>
 
+        <div class="mb-3">
+            <label class="form-label">
+                Veterinário
+            </label>
+
+            <input type="text" class="form-control" [value]="
+                    atendimentoEditar.nomeProfissional
+                " readonly>
+        </div>
+
+        <div class="d-grid mb-4">
+            <button type="button" class="btn btn-primary" [disabled]="salvandoAtendimento"
+                (click)="salvarSituacaoVeterinario()">
+
+                @if (salvandoAtendimento) {
+                Salvando...
+                } @else {
+                Salvar situação
+                }
+
+            </button>
+        </div>
+
+        <hr>
+
+        <div class="d-flex justify-content-between
+                    align-items-center mb-3">
+
+            <h5 class="h6 mb-0">
+                Serviços do atendimento
+            </h5>
+
+            <span class="fw-semibold">
+                Total:
+                {{
+                formatarValor(
+                atendimentoEditar.valorTotal
+                )
+                }}
+            </span>
+
+        </div>
+
+        @if (podeGerenciarServicos) {
+
+        <div class="row g-2 align-items-end mb-3">
+
+            <div class="col-12 col-md-7">
+                <label for="novoServico" class="form-label">
+                    Serviço
+                </label>
+
+                <select id="novoServico" class="form-select" [(ngModel)]="
+                        novoServico.idServico
+                    ">
+
+                    <option [ngValue]="0">
+                        Selecione um serviço
+                    </option>
+
+                    @for (
+                    servico of listaServicos;
+                    track servico.id
+                    ) {
+                    <option [ngValue]="servico.id">
+                        {{ servico.descricao }}
+                        —
+                        {{ formatarValor(servico.valor) }}
+                    </option>
+                    }
+
+                </select>
+            </div>
+
+            <div class="col-7 col-md-2">
+                <label for="quantidadeServico" class="form-label">
+                    Quantidade
+                </label>
+
+                <input id="quantidadeServico" type="number" min="1" class="form-control" [(ngModel)]="
+                        novoServico.quantidade
+                    ">
+            </div>
+
+            <div class="col-5 col-md-3 d-grid">
+                <button type="button" class="btn btn-success" (click)="adicionarServico()">
+                    Adicionar
+                </button>
+            </div>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-sm
+                       table-bordered align-middle">
+
+                <thead class="table-light">
+                    <tr>
+                        <th>Serviço</th>
+                        <th class="text-center">
+                            Quantidade
+                        </th>
+                        <th class="text-end">
+                            Valor unitário
+                        </th>
+                        <th class="text-end">
+                            Subtotal
+                        </th>
+                        <th class="text-center">
+                            Ação
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @for (
+                    servico of atendimentoEditar.servicos;
+                    track servico.id
+                    ) {
+                    <tr>
+
+                        <td>
+                            {{ servico.nome }}
+                        </td>
+
+                        <td class="text-center">
+                            {{ servico.quantidade }}
+                        </td>
+
+                        <td class="text-end">
+                            {{
+                            formatarValor(
+                            servico.valor
+                            )
+                            }}
+                        </td>
+
+                        <td class="text-end">
+                            {{
+                            formatarValor(
+                            servico.subtotal
+                            )
+                            }}
+                        </td>
+
+                        <td class="text-center">
+                            <button type="button" class="btn
+                                       btn-outline-danger
+                                       btn-sm" (click)="
+                                    removerServico(servico)
+                                ">
+                                Remover
+                            </button>
+                        </td>
+
+                    </tr>
+                    } @empty {
+                    <tr>
+                        <td colspan="5" class="text-center
+                                   text-muted py-3">
+                            Nenhum serviço registrado.
+                        </td>
+                    </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        } @else {
+
+        <div class="alert alert-info mb-0">
+
+            @if (
+            situacaoPersistidaEdicao ===
+            'AGENDADO'
+            ) {
+            Altere a situação para
+            <strong>Em andamento</strong>
+            e clique em
+            <strong>Salvar situação</strong>
+            para liberar o lançamento de serviços.
+            } @else {
+            Serviços não podem ser alterados
+            neste atendimento.
+            }
+
+        </div>
+
+        }
+
         }
 
         }
 
     </app-modalgenerico>
 
-    @if (ehVeterinario) {
+    }
 
-    <app-modalgenerico titulo="Registrar diagnóstico" textoBotaoAbrir="Diagnóstico"
-        classeBotaoAbrir="btn-outline-success btn-sm" textoSalvar="Salvar diagnóstico"
-        (aoAbrir)="prepararDiagnostico(item)" (aoSalvar)="salvarDiagnostico()">
+    <!-- Diagnóstico: somente em andamento e sem diagnóstico -->
+
+    @if (podeRegistrarDiagnostico(item)) {
+
+    <app-modalgenerico [titulo]="
+        possuiDiagnostico(item)
+            ? 'Editar diagnóstico'
+            : 'Registrar diagnóstico'
+    " textoBotaoAbrir="Diagnóstico" classeBotaoAbrir="btn-outline-success btn-sm" [textoSalvar]="
+        possuiDiagnostico(item)
+            ? 'Salvar alterações'
+            : 'Salvar diagnóstico'
+    " (aoAbrir)="prepararDiagnostico(item)" (aoSalvar)="salvarDiagnostico()">
 
         <div class="mb-3">
             <label for="diagnostico" class="form-label">
@@ -285,14 +534,17 @@
             </label>
 
             <textarea id="diagnostico" class="form-control" rows="5" [(ngModel)]="diagnosticoDigitado"
-                placeholder="Informe o diagnóstico do animal"></textarea>
+                placeholder="Informe o diagnóstico do animal">
+            </textarea>
         </div>
 
     </app-modalgenerico>
 
     }
 
-    @if (ehSecretaria) {
+    <!-- Exclusão: somente secretária e atendimento agendado -->
+
+    @if (podeExcluirAtendimento(item)) {
 
     <app-modalgenerico titulo="Confirmar exclusão" textoBotaoAbrir="Excluir"
         classeBotaoAbrir="btn-outline-danger btn-sm" textoSalvar="Excluir" (aoAbrir)="prepararExclusao(item)"
